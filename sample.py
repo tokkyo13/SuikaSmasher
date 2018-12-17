@@ -78,12 +78,12 @@ class SampleRobot(mk.Mumeikaneshige):
         # スイカ割りループ
         print('ready to smash')
 
+        BIAS = 5000
+        TIME = 60
         right_speed = 0
         left_speed = 0
         right_bias = 0
         left_bias = BIAS
-        BIAS = 5000
-        TIME = 60
         start_time = time.time()
 
         while True:
