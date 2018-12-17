@@ -86,7 +86,7 @@ class SampleRobot(mk.Mumeikaneshige):
 
         while True:
             diff_time = time.time() - start_time
-            right_bias = 0 if diff_time > 60 else (-5000 / 60) * diff_time + 5000
+            right_bias = 0 if diff_time > 60 else 5000 * (1 - diff_time / 60)
 
             # キーボードのキューの確認
             try:
