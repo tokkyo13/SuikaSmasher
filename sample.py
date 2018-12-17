@@ -46,10 +46,11 @@ class SampleRobot(mk.Mumeikaneshige):
 
                 if 's' in keys or 'S' in keys: #ストップ
                     self.controllers['Motor'].cmd_queue.put((0,0))
+                    break
                 elif 'r' in keys or 'R' in keys:
-                    self.controllers['Motor'].cmd_queue.put((-5000, 5000))
+                    self.controllers['Motor'].cmd_queue.put((-10000, 10000))
                 elif 'l' in keys or 'L' in keys:
-                    self.controllers['Motor'].cmd_queue.put((5000, -5000))
+                    self.controllers['Motor'].cmd_queue.put((10000, -10000))
                 else:
                     pass
             except queue.Empty:
@@ -67,6 +68,7 @@ class SampleRobot(mk.Mumeikaneshige):
                     self.controllers['Motor'].cmd_queue.put((-10000,10000)) # 右回転
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '黙れ' in julius_msg:
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                     sys.exit()
                 else :
                     pass
@@ -92,20 +94,27 @@ class SampleRobot(mk.Mumeikaneshige):
                 if 's' in keys or 'S' in keys: #ストップ
                     right_speed = 0
                     left_speed = 0
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'g' in keys or 'G' in keys:
                     right_speed = 10000
                     left_speed = 10000
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'r' in keys or 'R' in keys:
                     right_speed += -2000
                     left_bias += 2000
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'l' in keys or 'L' in keys:
                     right_speed += 2000
                     left_bias += -2000
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'b' in keys or 'B' in keys:
                     right_speed = -10000
                     left_bias = -10000
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'd' in keys or 'D' in keys:
-                    self.controllers['Arm'].cmd_queue.put(-50)
+                    elf.controllers['JTalk'].cmd_queue.put('./voice-sample-female/test.wav')
+                    time.sleep(1)
+                    self.controllers['Arm'].cmd_queue.put(-40)
                     time.sleep(2)
                     break
                 else:
@@ -135,7 +144,7 @@ class SampleRobot(mk.Mumeikaneshige):
                 elif 'やれ' in julius_msg:
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/test.wav')
                     time.sleep(1)
-                    self.controllers['Arm'].cmd_queue.put(-50)
+                    self.controllers['Arm'].cmd_queue.put(-40)
                     time.sleep(2)
                     break
                 else :
@@ -156,7 +165,7 @@ class SampleRobot(mk.Mumeikaneshige):
             print('fail')
             self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/failure.wav')
         time.sleep(2)
-        self.controllers['Arm'].cmd_queue.put(50)
+        self.controllers['Arm'].cmd_queue.put(40)
 
 def main():
     robot = SampleRobot()
