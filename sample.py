@@ -80,7 +80,7 @@ class SampleRobot(mk.Mumeikaneshige):
 
         right_speed = 0
         left_speed = 0
-        right_bias = 2000
+        right_bias = 5000
         left_bias = 0
         start_time = time.time()
         recovery_time = start_time + 60
@@ -102,8 +102,8 @@ class SampleRobot(mk.Mumeikaneshige):
                     left_speed = 0
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'g' in keys or 'G' in keys:
-                    right_speed = 1000
-                    left_speed = 1000
+                    right_speed = 10000
+                    left_speed = 10000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'r' in keys or 'R' in keys:
                     right_speed += -2000
@@ -137,8 +137,8 @@ class SampleRobot(mk.Mumeikaneshige):
                     left_speed = 0
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '進め' in julius_msg:
-                    right_speed = 1000
-                    left_speed = 1000
+                    right_speed = 10000
+                    left_speed = 10000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '右' in julius_msg:
                     right_speed += -2000
