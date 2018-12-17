@@ -112,7 +112,7 @@ class SampleRobot(mk.Mumeikaneshige):
                     left_bias = -10000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'd' in keys or 'D' in keys:
-                    elf.controllers['JTalk'].cmd_queue.put('./voice-sample-female/test.wav')
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/test.wav')
                     time.sleep(1)
                     self.controllers['Arm'].cmd_queue.put(-40)
                     time.sleep(2)
