@@ -83,10 +83,12 @@ class SampleRobot(mk.Mumeikaneshige):
         right_bias = 2000
         left_bias = 0
         start_time = time.time()
+        recovery_time = start_time + 60
 
         while True:
-            howlong = int(time.time() - start_time) / 20
-            right_bias += -100 * howlong
+            now_time = time.time()
+            remain_time = recovery_time - now_time if recovery_time - now_time > 0 else 0
+            right_bias = right_bias * (remain_time / 60)
 
             # キーボードのキューの確認
             try:
@@ -100,8 +102,8 @@ class SampleRobot(mk.Mumeikaneshige):
                     left_speed = 0
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'g' in keys or 'G' in keys:
-                    right_speed = 10000
-                    left_speed = 10000
+                    right_speed = 1000
+                    left_speed = 1000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'r' in keys or 'R' in keys:
                     right_speed += -2000
@@ -135,8 +137,8 @@ class SampleRobot(mk.Mumeikaneshige):
                     left_speed = 0
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '進め' in julius_msg:
-                    right_speed = 10000
-                    left_speed = 10000
+                    right_speed = 1000
+                    left_speed = 1000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '右' in julius_msg:
                     right_speed += -2000
