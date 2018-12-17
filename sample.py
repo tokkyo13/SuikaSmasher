@@ -83,12 +83,10 @@ class SampleRobot(mk.Mumeikaneshige):
         right_bias = 5000
         left_bias = 0
         start_time = time.time()
-        recovery_time = start_time + 60
 
         while True:
-            now_time = time.time()
-            remain_time = recovery_time - now_time if recovery_time - now_time > 0 else 0
-            right_bias = right_bias * (remain_time / 60)
+            diff_time = time.time() - start_time
+            right_bias = 0 if diff_time > 60 else (-5000 / 60) * diff_time + 5000
 
             # キーボードのキューの確認
             try:
