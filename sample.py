@@ -35,6 +35,7 @@ class SampleRobot(mk.Mumeikaneshige):
         # 実際の動作をここに書く
 
         # 目回しループ
+        print('ready to turn')
         while True:
             # キーボードのキューの確認
             try:
@@ -71,6 +72,7 @@ class SampleRobot(mk.Mumeikaneshige):
                 pass
 
         # スイカ割りループ
+        print('ready to smash')
         while True:
             # キーボードのキューの確認
             try:
@@ -91,6 +93,7 @@ class SampleRobot(mk.Mumeikaneshige):
                     self.controllers['Motor'].cmd_queue.put((-10000,-10000))
                 elif 'd' in keys or 'D' in keys:
                     self.controllers['Arm'].cmd_queue.put(-60)
+                    time.sleep(2)
                     break
                 else:
                     pass
@@ -118,7 +121,9 @@ class SampleRobot(mk.Mumeikaneshige):
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'やれ' in julius_msg:
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/test.wav')
+                    time.sleep(1)
                     self.controllers['Arm'].cmd_queue.put(-60)
+                    time.sleep(2)
                     break
                 else :
                     pass
@@ -127,15 +132,18 @@ class SampleRobot(mk.Mumeikaneshige):
         
         stole = self.senders['DetectStall'].msg_queue.get()
         if stole == 1:
+            print('stole detected')
             self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/success.wav')
         else:
+            print('stole ')
             self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/failure.wav')
+        time.sleep(2)
         self.controllers['Arm'].cmd_queue.put(60)
 
 def main():
     robot = SampleRobot()
-    
-    robot.run()
+    while True:
+        robot.run()
 
 if __name__ == '__main__':
     main()
