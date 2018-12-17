@@ -80,10 +80,14 @@ class SampleRobot(mk.Mumeikaneshige):
 
         right_speed = 0
         left_speed = 0
-        right_bias = 1000
+        right_bias = 2000
         left_bias = 0
+        start_time = time.time()
 
         while True:
+            howlong = int(time.time() - start_time) / 20
+            right_bias += -100 * howlong
+
             # キーボードのキューの確認
             try:
                 keys = None # 何かしら入れておく特に大きな意味はない
@@ -127,19 +131,24 @@ class SampleRobot(mk.Mumeikaneshige):
                 julius_msg = None 
                 julius_msg = self.senders['Julius'].msg_queue.get(timeout = 0.1)
                 if '止まれ' in julius_msg:
-                    self.controllers['Motor'].cmd_queue.put((0,0))
+                    right_speed = 0
+                    left_speed = 0
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '進め' in julius_msg:
-                    self.controllers['Motor'].cmd_queue.put((10000,10000))
+                    right_speed = 10000
+                    left_speed = 10000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '右' in julius_msg:
-                    self.controllers['Motor'].cmd_queue.put((-5000, 5000))
+                    right_speed += -2000
+                    left_bias += 2000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '左' in julius_msg:
-                    self.controllers['Motor'].cmd_queue.put((5000, -5000))
+                    right_speed += 2000
+                    left_bias += -2000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '下がれ' in julius_msg:
-                    self.controllers['Motor'].cmd_queue.put((-10000,-10000))
+                    right_speed = -10000
+                    left_bias = -10000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'やれ' in julius_msg:
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/test.wav')
