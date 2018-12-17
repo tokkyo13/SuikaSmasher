@@ -24,7 +24,7 @@ class SampleRobot(mk.Mumeikaneshige):
         
         self.th_key_input.start() # スレッドをスタートする
 
-        self.controllers['Arm'].cmd_queue.put(-20)
+        self.controllers['Arm'].cmd_queue.put(60)
     
     def key_input(self, key_queue):
         while True:
@@ -33,7 +33,44 @@ class SampleRobot(mk.Mumeikaneshige):
 
     def run(self):
         # 実際の動作をここに書く
-        
+
+        # 目回しループ
+        while True:
+            # キーボードのキューの確認
+            try:
+                keys = None # 何かしら入れておく特に大きな意味はない
+                
+                # 0.1秒経過してもキューが空だったらmp.Empty例外が出る
+                keys = self.key_queue.get(timeout = 0.1)
+
+                if 's' in keys or 'S' in keys: #ストップ
+                    self.controllers['Motor'].cmd_queue.put((0,0))
+                elif 'r' in keys or 'R' in keys:
+                    self.controllers['Motor'].cmd_queue.put((-5000, 5000))
+                elif 'l' in keys or 'L' in keys:
+                    self.controllers['Motor'].cmd_queue.put((5000, -5000))
+                else:
+                    pass
+            except queue.Empty:
+                pass
+
+            # Juliusから送られる文字列の確認
+            try:
+                julius_msg = None 
+                julius_msg = self.senders['Julius'].msg_queue.get(timeout = 0.1)
+                if '止まれ' in julius_msg:
+                    self.controllers['Motor'].cmd_queue.put((0,0))
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
+                    break
+                elif '回れ' in julius_msg:
+                    self.controllers['Motor'].cmd_queue.put((-10000,10000)) # 右回転
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
+                else :
+                    pass
+            except queue.Empty:
+                pass
+
+        # スイカ割りループ
         while True:
             # キーボードのキューの確認
             try:
@@ -52,6 +89,9 @@ class SampleRobot(mk.Mumeikaneshige):
                     self.controllers['Motor'].cmd_queue.put((5000, -5000))
                 elif 'b' in keys or 'B' in keys:
                     self.controllers['Motor'].cmd_queue.put((-10000,-10000))
+                elif 'd' in keys or 'D' in keys:
+                    self.controllers['Arm'].cmd_queue.put(-60)
+                    break
                 else:
                     pass
             except queue.Empty:
@@ -63,29 +103,35 @@ class SampleRobot(mk.Mumeikaneshige):
                 julius_msg = self.senders['Julius'].msg_queue.get(timeout = 0.1)
                 if '止まれ' in julius_msg:
                     self.controllers['Motor'].cmd_queue.put((0,0))
-                    self.controllers['JTalk'].cmd_queue.put('./voice-sample/yes.wav')
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '進め' in julius_msg:
                     self.controllers['Motor'].cmd_queue.put((10000,10000))
-                    self.controllers['JTalk'].cmd_queue.put('./voice-sample/yes.wav')
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '右' in julius_msg:
                     self.controllers['Motor'].cmd_queue.put((-5000, 5000))
-                    self.controllers['JTalk'].cmd_queue.put('./voice-sample/yes.wav')
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '左' in julius_msg:
                     self.controllers['Motor'].cmd_queue.put((5000, -5000))
-                    self.controllers['JTalk'].cmd_queue.put('./voice-sample/yes.wav')
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '下がれ' in julius_msg:
                     self.controllers['Motor'].cmd_queue.put((-10000,-10000))
-                    self.controllers['JTalk'].cmd_queue.put('./voice-sample/yes.wav')
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'やれ' in julius_msg:
-                    self.controllers['JTalk'].cmd_queue.put('./voice-sample/test.wav')
-                    self.controllers['Arm'].cmd_queue.put(50)
-                    time.sleep(1)
-                    self.controllers['Arm'].cmd_queue.put(-20)
+                    self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/test.wav')
+                    self.controllers['Arm'].cmd_queue.put(-60)
+                    break
                 else :
                     pass
             except queue.Empty:
                 pass
         
+        stole = self.senders['DetectStall'].msg_queue.get()
+        if stole == 1:
+            self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/success.wav')
+        else:
+            self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/failure.wav')
+        self.controllers['Arm'].cmd_queue.put(60)
+
 def main():
     robot = SampleRobot()
     
