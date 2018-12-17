@@ -105,15 +105,15 @@ class SampleRobot(mk.Mumeikaneshige):
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'r' in keys or 'R' in keys:
                     right_speed += -2000
-                    left_bias += 2000
+                    left_speed += 2000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'l' in keys or 'L' in keys:
                     right_speed += 2000
-                    left_bias += -2000
+                    left_speed += -2000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'b' in keys or 'B' in keys:
                     right_speed = -10000
-                    left_bias = -10000
+                    left_speed = -10000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'd' in keys or 'D' in keys:
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/test.wav')
@@ -140,15 +140,15 @@ class SampleRobot(mk.Mumeikaneshige):
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '右' in julius_msg:
                     right_speed += -2000
-                    left_bias += 2000
+                    left_speed += 2000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '左' in julius_msg:
                     right_speed += 2000
-                    left_bias += -2000
+                    left_speed += -2000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '下がれ' in julius_msg:
                     right_speed = -10000
-                    left_bias = -10000
+                    left_speed = -10000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'やれ' in julius_msg:
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/test.wav')
