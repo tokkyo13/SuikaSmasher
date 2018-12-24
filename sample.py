@@ -48,9 +48,9 @@ class SampleRobot(mk.Mumeikaneshige):
                     self.controllers['Motor'].cmd_queue.put((0,0))
                     break
                 elif 'r' in keys or 'R' in keys:
-                    self.controllers['Motor'].cmd_queue.put((-10000, 10000))
+                    self.controllers['Motor'].cmd_queue.put((-20000, 30000))
                 elif 'l' in keys or 'L' in keys:
-                    self.controllers['Motor'].cmd_queue.put((10000, -10000))
+                    self.controllers['Motor'].cmd_queue.put((20000, -30000))
                 else:
                     pass
             except queue.Empty:
@@ -65,7 +65,7 @@ class SampleRobot(mk.Mumeikaneshige):
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                     break
                 elif 'まわれ' in julius_msg:
-                    self.controllers['Motor'].cmd_queue.put((-10000,10000)) # 右回転
+                    self.controllers['Motor'].cmd_queue.put((-20000,30000)) # 右回転
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '黙れ' in julius_msg:
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
@@ -78,8 +78,8 @@ class SampleRobot(mk.Mumeikaneshige):
         # スイカ割りループ
         print('ready to smash')
 
-        BIAS = 5000
-        TIME = 60
+        BIAS = 10000
+        TIME = 30
         right_speed = 0
         left_speed = 0
         right_bias = 0
@@ -88,7 +88,7 @@ class SampleRobot(mk.Mumeikaneshige):
 
         while True:
             diff_time = time.time() - start_time
-            right_bias = 0 if diff_time > TIME else BIAS * (1 - diff_time / TIME)
+            left_bias = 0 if diff_time > TIME else BIAS * (1 - diff_time / TIME)
 
             # キーボードのキューの確認
             try:
@@ -102,20 +102,20 @@ class SampleRobot(mk.Mumeikaneshige):
                     left_speed = 0
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'g' in keys or 'G' in keys:
-                    right_speed = 10000
-                    left_speed = 10000
+                    right_speed = 20000
+                    left_speed = 20000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'r' in keys or 'R' in keys:
-                    right_speed += -5000
-                    left_speed += 5000
+                    right_speed += -10000
+                    left_speed += 10000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'l' in keys or 'L' in keys:
-                    right_speed += 5000
-                    left_speed += -5000
+                    right_speed += 10000
+                    left_speed += -10000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'b' in keys or 'B' in keys:
-                    right_speed = -10000
-                    left_speed = -10000
+                    right_speed = -20000
+                    left_speed = -20000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'd' in keys or 'D' in keys:
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/test.wav')
@@ -137,20 +137,20 @@ class SampleRobot(mk.Mumeikaneshige):
                     left_speed = 0
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '進め' in julius_msg:
-                    right_speed = 10000
-                    left_speed = 10000
+                    right_speed = 20000
+                    left_speed = 20000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '右' in julius_msg:
-                    right_speed += -5000
-                    left_speed += 5000
+                    right_speed += -10000
+                    left_speed += 10000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '左' in julius_msg:
-                    right_speed += 5000
-                    left_speed += -5000
+                    right_speed += 10000
+                    left_speed += -10000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif '下がれ' in julius_msg:
-                    right_speed = -10000
-                    left_speed = -10000
+                    right_speed = -20000
+                    left_speed = -20000
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/yes.wav')
                 elif 'やれ' in julius_msg:
                     self.controllers['JTalk'].cmd_queue.put('./voice-sample-female/test.wav')
